@@ -62,7 +62,7 @@ Ensure that your certificate and and key are readable by the user running Graylo
 
 It is recommended to use a commercial external Certificate Authority (CA). Documentation contributions for using internal CAs would be appreciated. Documentation for using Let's Encrypt Certificates is in progress.
 
-When creating A CEF TLS Input, be sure to check the `Accept encrypted connections` checkbox.
+When creating a CEF TLS Input, be sure to check the `Accept encrypted connections` checkbox.
 
 ## Fortigate setup
 
