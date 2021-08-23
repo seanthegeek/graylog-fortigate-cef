@@ -1,6 +1,6 @@
 # graylog-fortigate-cef
 
-This Graylog[graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1 and FortiOS 7.0.1, but is should work with FortiOS 6.4 as well.
+This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1 and FortiOS 7.0.1, but is should work with FortiOS 6.4 as well.
 
 ## Streams
 
@@ -78,7 +78,7 @@ end
 
 ### CEF TCP
 
-**Warning**: When using CEF TCP, the server setting **must** be the Graylog server's fully-qualified hostname, **not** the IP address.
+**Warning**: When using CEF TCP, the 'server' setting **must** be set the Graylog server's fully-qualified hostname, **not** the IP address.
 
 ```fortios
 config log syslogd setting
