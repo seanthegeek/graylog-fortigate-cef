@@ -6,7 +6,7 @@ This [Graylog][graylog] content pack includes a steam and dashboards for Fortine
 
 ### Fortigate
 
-Routes CEF messages from Fortigates to the Fortigate Graylog index
+Routes CEF messages from Fortigates to the `Fortigate` Graylog index set
 
 ## Dashboards
 
