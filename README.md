@@ -1,50 +1,56 @@
-# graylog-fortigate-cef
+# Fortigate CEF Logs - Content Pack
 
-This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1 and FortiOS 7.0.1, but it should work with FortiOS 6.4 as well.
+This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1.3 and FortiOS 7.0.1, but it should work with FortiOS 6.4 as well.
 
 ## Streams
 
-### Fortigate
+### Fortigate CEF Logs
 
-Routes CEF messages from Fortigates to the `Fortigate` Graylog index set
+Routes CEF logs from Fortigates to the `Fortigate CEF Logs` Graylog index set
 
 ## Dashboards
 
-### Fortigate Applications and Devices
+### Fortigate - Applications and Devices
 
 Analysis of devices and application traffic
 
 Includes IP addresses, MAC addresses, device manufacturers, and application layer network traffic
 
-### Fortigate DNS Traffic
+### Fortigate - DNS Traffic
 
 Details of DNS queries and responses
 
 Includes details of the query, response, action, and category
 
-### Fortigate IPS Alerts
+### Fortigate - IPS Alerts
 
 Intrusion Prevention System (IPS) alert details
 
 Includes signature, action, severity, source, and destination information
 
-### Fortigate Overview
+### Fortigate - Overview
 
 An overview of incoming messages from Fortigates
 
 Includes Fortigate hostnames, serial numbers, and full message details
 
-### Fortigate SSL/TLS Interventions
+### Fortigate - SSL/TLS Interventions
 
 SSL/TLS actions taken by Fortigates
 
 Provides records of when Fortigates intervened (with or without decrypting) in SSL/TLS traffic
 
-### Fortigate Web Traffic
+### Fortigate - Web Traffic
 
 Web traffic details
 
 Includes category, action, and more
+
+## Searches
+
+### Fortigate CEF
+
+All Fortigate CEF logs
 
 ## Graylog Setup
 
