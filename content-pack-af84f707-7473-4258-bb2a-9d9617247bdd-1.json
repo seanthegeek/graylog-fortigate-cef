@@ -1,0 +1,3483 @@
+{
+  "v": 1,
+  "id": "af84f707-7473-4258-bb2a-9d9617247bdd",
+  "rev": 1,
+  "name": "graylog-fortigate-cef",
+  "summary": " Stream and dashboards for Fortinet Fortigate CEF logs ",
+  "description": "This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1 and FortiOS 7.0.1, but it should work with FortiOS 6.4 as well.\n\n## Streams\n\n### Fortigate\n\nRoutes CEF messages from Fortigates to the `Fortigate` Graylog index set\n\n## Dashboards\n\n### Fortigate Applications and Devices\n\nAnalysis of devices and application traffic\n\nIncludes IP addresses, MAC addresses, device manufacturers, and application layer network traffic\n\n### Fortigate DNS Traffic\n\nDetails of DNS queries and responses\n\nIncludes details of the query, response, action, and category\n\n### Fortigate IPS Alerts\n\nIntrusion Prevention System (IPS) alert details\n\nIncludes signature, action, severity, source, and destination information\n\n### Fortigate Overview\n\nAn overview of incoming messages from Fortigates\n\nIncludes Fortigate hostnames, serial numbers, and full message details\n\n### Fortigate SSL/TLS Interventions\n\nSSL/TLS actions taken by Fortigates\n\nProvides records of when Fortigates intervened (with or without decrypting) in SSL/TLS traffic\n\n### Fortigate Web Traffic\n\nWeb traffic details\n\nIncludes category, action, and more\n\n## Graylog Setup\n\nCreate a CEF UDP **or** a CEF TCP input by navigating to System> Inputs as a Graylog administrator, and clicking on Launch New input.\n\nBefore creating a CEF TCP input:\n\nEnsure that your certificate and and key are readable by the user running Graylog, or Graylog will create it's own self-signed certificate (which Fortigates will not trust) without informing you in the web UI (this error can be found in `server.log`.)\n\nIt is recommended to use a commercial external Certificate Authority (CA). Documentation contributions for using internal CAs would be appreciated. Documentation for using Let's Encrypt Certificates is in progress.\n\nWhen creating A CEF TLS Input, be sure to check the `Accept encrypted connections` checkbox.\n\n## Fortigate setup\n\nConfigure your Fortigates to send data to Graylog in CEF format by using the FortiOS [Command Line Interface (CLI)][CLI]. Replace the server address and port with the address and port of your input, of course.\n\n### CEF UDP\n\n**Warning** : UDP traffic is unencrypted.\n\n```fortios\nconfig log syslogd setting\n    set status enable\n    set server \"graylog.example.com\"\n    set port 5555\n    set format cef\n    set mode udp\nend\n```\n\n### CEF TCP\n\n**Warning**: When using CEF TCP, the 'server' setting **must** be set the Graylog server's fully-qualified hostname, **not** the IP address.\n\n```fortios\nconfig log syslogd setting\n    set status enable\n    set server \"graylog.example.com\"\n    set port 5555\n    set format cef\n    set mode reliable\nend\n```\n\n[Graylog]: https://www.graylog.org/\n[CLI]: https://docs.fortinet.com/document/fortigate/7.0.1/cli-reference/445620/config-log-syslogd-setting\n",
+  "vendor": "Sean Whalen - @seanthegeek",
+  "url": "https://github.com/seanthegeek/graylog-fortigate-cef",
+  "parameters": [],
+  "entities": [
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "2"
+      },
+      "id": "5a6cdf20-c4fe-4311-b98a-c5385bb70b07",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": "An overview of incoming messages from Fortigates"
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "e9fb44da-ba72-4d73-842d-677b784b23d4",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsubtype",
+                      "limit": 15
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "4e9c4f54-267e-40b1-b95d-473298240003",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "deviceExternalId",
+                      "limit": 1000
+                    },
+                    {
+                      "type": "values",
+                      "field": "source",
+                      "limit": 1000
+                    },
+                    {
+                      "type": "values",
+                      "field": "device_version",
+                      "limit": 1000
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "64260cec-c952-44c3-bb3c-a17c2c61c8af",
+                  "column_groups": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "deviceExternalId",
+                      "direction": "Descending"
+                    }
+                  ]
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": null,
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "offset": 0,
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "f64b79b7-6c6d-4283-8855-e7be282d2f30",
+                  "limit": 150
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTlevel",
+                      "limit": 15
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "e32c8ebe-ced0-4fe5-8f3f-6ac8d7049a88",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "Message Count",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [],
+                  "type": "pivot",
+                  "id": "3a8eb8cf-9465-4152-95b1-5712a2285d4f",
+                  "column_groups": [],
+                  "sort": []
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-22T18:56:16.889Z"
+        },
+        "created_at": "2021-08-21T18:39:24.733Z",
+        "requires": {},
+        "state": {
+          "e9fb44da-ba72-4d73-842d-677b784b23d4": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "tab": {
+                "title": "Overview"
+              },
+              "widget": {
+                "6ce98b55-8b80-4e7b-99b1-dc7eac862800": "Incoming Message Count",
+                "773f59c1-2a64-4e0b-bbe3-804e52590749": "Message Count by FTNTFGTsubtype",
+                "de904358-5537-4ba1-8990-f3c7106f5a97": "Firewalls",
+                "b71059b1-bbc5-45ca-8b98-abadf80a44a4": "System Logs",
+                "b70c2eb1-001c-42e3-908f-1125c80d12bd": "Log Levels",
+                "3ada64fa-a06b-44bc-b184-7218d7ad07d3": "Details"
+              }
+            },
+            "widgets": [
+              {
+                "id": "3ada64fa-a06b-44bc-b184-7218d7ad07d3",
+                "type": "messages",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "FTNTFGTlevel",
+                    "FTNTFGTsubtype",
+                    "FTNTFGTeventtype",
+                    "msg",
+                    "source"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "b70c2eb1-001c-42e3-908f-1125c80d12bd",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTlevel",
+                      "type": "values",
+                      "config": {
+                        "limit": 15
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "de904358-5537-4ba1-8990-f3c7106f5a97",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "deviceExternalId",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    },
+                    {
+                      "field": "source",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    },
+                    {
+                      "field": "device_version",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "deviceExternalId",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "773f59c1-2a64-4e0b-bbe3-804e52590749",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTsubtype",
+                      "type": "values",
+                      "config": {
+                        "limit": 15
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "6ce98b55-8b80-4e7b-99b1-dc7eac862800",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "numeric",
+                  "event_annotation": false,
+                  "row_pivots": [],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "Message Count"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              }
+            ],
+            "widget_mapping": {
+              "b70c2eb1-001c-42e3-908f-1125c80d12bd": [
+                "e32c8ebe-ced0-4fe5-8f3f-6ac8d7049a88"
+              ],
+              "de904358-5537-4ba1-8990-f3c7106f5a97": [
+                "64260cec-c952-44c3-bb3c-a17c2c61c8af"
+              ],
+              "6ce98b55-8b80-4e7b-99b1-dc7eac862800": [
+                "3a8eb8cf-9465-4152-95b1-5712a2285d4f"
+              ],
+              "3ada64fa-a06b-44bc-b184-7218d7ad07d3": [
+                "f64b79b7-6c6d-4283-8855-e7be282d2f30"
+              ],
+              "773f59c1-2a64-4e0b-bbe3-804e52590749": [
+                "4e9c4f54-267e-40b1-b95d-473298240003"
+              ]
+            },
+            "positions": {
+              "b70c2eb1-001c-42e3-908f-1125c80d12bd": {
+                "col": 9,
+                "row": 5,
+                "height": 3,
+                "width": 4
+              },
+              "de904358-5537-4ba1-8990-f3c7106f5a97": {
+                "col": 4,
+                "row": 5,
+                "height": 3,
+                "width": 5
+              },
+              "6ce98b55-8b80-4e7b-99b1-dc7eac862800": {
+                "col": 1,
+                "row": 5,
+                "height": 3,
+                "width": 3
+              },
+              "3ada64fa-a06b-44bc-b184-7218d7ad07d3": {
+                "col": 3,
+                "row": 8,
+                "height": 7,
+                "width": 10
+              },
+              "773f59c1-2a64-4e0b-bbe3-804e52590749": {
+                "col": 1,
+                "row": 8,
+                "height": 7,
+                "width": 2
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate Overview"
+        },
+        "type": "DASHBOARD",
+        "description": {
+          "@type": "string",
+          "@value": "Includes Fortigate hostnames, serial numbers, and full message details"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "2"
+      },
+      "id": "f7e2aeae-34bc-4379-bc1e-4a627b2df40c",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": "Intrusion Prevention System (IPS) alert details"
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "7566f84a-e75a-4878-88c3-dd1e91a7f7d8",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ips"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 604800
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "act",
+                      "limit": 10
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "36b086a9-a3e5-4ada-ad59-51761ef33d1a",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ips"
+                  },
+                  "name": null,
+                  "timerange": {
+                    "type": "relative",
+                    "from": 604800
+                  },
+                  "offset": 0,
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "ba3f7811-3ef0-4bb7-957d-bdaa9cfe0cfe",
+                  "limit": 150
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ips"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 604800
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "src",
+                      "limit": 1000
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrccountry",
+                      "limit": 1000
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "d876b7c1-8f83-4e57-a132-783f602fb29e",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 604800
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTattackid",
+                      "limit": 1000
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTattack",
+                      "limit": 1000
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "ed7ab0bb-155b-4f18-b649-7cf3ed93ad15",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ips"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 604800
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrccountry",
+                      "limit": 20
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "349279c7-238f-4c46-a056-c2b7cf3df55e",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ips"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 604800
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTseverity",
+                      "limit": 10
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "8a41b94b-4e6e-4124-a68a-26f81f9b21ed",
+                  "column_groups": [],
+                  "sort": []
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-23T02:57:37.793Z"
+        },
+        "created_at": "2021-08-21T02:43:39.934Z",
+        "requires": {},
+        "state": {
+          "7566f84a-e75a-4878-88c3-dd1e91a7f7d8": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "tab": {
+                "title": "IPS Alerts"
+              },
+              "widget": {
+                "042f589d-7c0e-49b0-8dcf-721b5fca42be": "Top 10 attack source countries (copy)",
+                "d327ea3c-9ce0-4f68-b486-50cee8af639d": "Severity",
+                "7ed33e84-a1d9-4b54-8bba-c978a9b52774": "Messages for FTNTFGTattackid:45765",
+                "cef63959-1434-4063-984c-a7b22bae3d12": "Attacks",
+                "570e2667-01d3-43cf-8721-29a552b401d9": "Action",
+                "cafca786-15bc-4b05-9fa6-99821a8fe5f7": "Details",
+                "361cad97-5725-4622-8c4c-5a04d5988644": "Attack source countries (copy) (copy)",
+                "d680ae46-016e-47b6-be30-82b50dff6869": "Attack source countries",
+                "363dd4e2-54bc-4509-a868-cb7f249273a7": "Top 20 Attack Source Countries",
+                "b9084ecd-7c59-414b-bedd-9f03890a771e": "Attack Source IP Addresses"
+              }
+            },
+            "widgets": [
+              {
+                "id": "b9084ecd-7c59-414b-bedd-9f03890a771e",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 604800
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ips"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "src",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrccountry",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "570e2667-01d3-43cf-8721-29a552b401d9",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 604800
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ips"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "act",
+                      "type": "values",
+                      "config": {
+                        "limit": 10
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "363dd4e2-54bc-4509-a868-cb7f249273a7",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 604800
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ips"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTsrccountry",
+                      "type": "values",
+                      "config": {
+                        "limit": 20
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "cef63959-1434-4063-984c-a7b22bae3d12",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 604800
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTattackid",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTattack",
+                      "type": "values",
+                      "config": {
+                        "limit": 1000
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "cafca786-15bc-4b05-9fa6-99821a8fe5f7",
+                "type": "messages",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 604800
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ips"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "FTNTFGTattackid",
+                    "FTNTFGTattack",
+                    "FTNTFGTsrccountry",
+                    "act",
+                    "src",
+                    "dst"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "d327ea3c-9ce0-4f68-b486-50cee8af639d",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 604800
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ips"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTseverity",
+                      "type": "values",
+                      "config": {
+                        "limit": 10
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              }
+            ],
+            "widget_mapping": {
+              "cafca786-15bc-4b05-9fa6-99821a8fe5f7": [
+                "ba3f7811-3ef0-4bb7-957d-bdaa9cfe0cfe"
+              ],
+              "d327ea3c-9ce0-4f68-b486-50cee8af639d": [
+                "8a41b94b-4e6e-4124-a68a-26f81f9b21ed"
+              ],
+              "570e2667-01d3-43cf-8721-29a552b401d9": [
+                "36b086a9-a3e5-4ada-ad59-51761ef33d1a"
+              ],
+              "363dd4e2-54bc-4509-a868-cb7f249273a7": [
+                "349279c7-238f-4c46-a056-c2b7cf3df55e"
+              ],
+              "b9084ecd-7c59-414b-bedd-9f03890a771e": [
+                "d876b7c1-8f83-4e57-a132-783f602fb29e"
+              ],
+              "cef63959-1434-4063-984c-a7b22bae3d12": [
+                "ed7ab0bb-155b-4f18-b649-7cf3ed93ad15"
+              ]
+            },
+            "positions": {
+              "cafca786-15bc-4b05-9fa6-99821a8fe5f7": {
+                "col": 1,
+                "row": 17,
+                "height": 8,
+                "width": "Infinity"
+              },
+              "d327ea3c-9ce0-4f68-b486-50cee8af639d": {
+                "col": 1,
+                "row": 9,
+                "height": 4,
+                "width": 4
+              },
+              "570e2667-01d3-43cf-8721-29a552b401d9": {
+                "col": 5,
+                "row": 9,
+                "height": 4,
+                "width": 3
+              },
+              "363dd4e2-54bc-4509-a868-cb7f249273a7": {
+                "col": 8,
+                "row": 9,
+                "height": 4,
+                "width": 5
+              },
+              "b9084ecd-7c59-414b-bedd-9f03890a771e": {
+                "col": 7,
+                "row": 13,
+                "height": 4,
+                "width": 6
+              },
+              "cef63959-1434-4063-984c-a7b22bae3d12": {
+                "col": 1,
+                "row": 13,
+                "height": 4,
+                "width": 6
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate IPS Alerts"
+        },
+        "type": "DASHBOARD",
+        "description": {
+          "@type": "string",
+          "@value": "Includes signature, action, severity, source, and destination information"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "2"
+      },
+      "id": "6991215c-b42d-4319-a0b5-af77dcf500fb",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": "SSL/TLS actions taken by Fortigates"
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "2a502371-8047-4812-81a3-8f5db8a2f123",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ssl"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "act",
+                      "limit": 15
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "18dae61f-f76d-4e3e-ace2-d0e64def070f",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:ssl"
+                  },
+                  "name": null,
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "offset": 0,
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "ee0f02e0-5d2c-4429-8835-a6a70e0d6d35",
+                  "limit": 150
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-23T02:44:22.854Z"
+        },
+        "created_at": "2021-08-22T23:47:06.988Z",
+        "requires": {},
+        "state": {
+          "2a502371-8047-4812-81a3-8f5db8a2f123": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "tab": {
+                "title": "SSL/TLS"
+              },
+              "widget": {
+                "1944a9c0-0869-4531-9d19-cd48a356581f": "Details",
+                "5ca947fa-8a21-4ed9-bd46-481ff01bb583": "SSL Log (copy)",
+                "d7980de5-bca6-41b3-ba4b-7be6ac7f2fe6": "Action",
+                "7130df2e-28c4-48ba-9baa-55cad247b191": "SSL/TLS Action (copy)"
+              }
+            },
+            "widgets": [
+              {
+                "id": "d7980de5-bca6-41b3-ba4b-7be6ac7f2fe6",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ssl"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "act",
+                      "type": "values",
+                      "config": {
+                        "limit": 15
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "1944a9c0-0869-4531-9d19-cd48a356581f",
+                "type": "messages",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:ssl"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "FTNTFGTeventtype",
+                    "src",
+                    "dst",
+                    "dhost",
+                    "act",
+                    "source"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              }
+            ],
+            "widget_mapping": {
+              "d7980de5-bca6-41b3-ba4b-7be6ac7f2fe6": [
+                "18dae61f-f76d-4e3e-ace2-d0e64def070f"
+              ],
+              "1944a9c0-0869-4531-9d19-cd48a356581f": [
+                "ee0f02e0-5d2c-4429-8835-a6a70e0d6d35"
+              ]
+            },
+            "positions": {
+              "d7980de5-bca6-41b3-ba4b-7be6ac7f2fe6": {
+                "col": 1,
+                "row": 6,
+                "height": 4,
+                "width": 4
+              },
+              "1944a9c0-0869-4531-9d19-cd48a356581f": {
+                "col": 1,
+                "row": 10,
+                "height": 5,
+                "width": "Infinity"
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate SSL/TLS Interventions"
+        },
+        "type": "DASHBOARD",
+        "description": {
+          "@type": "string",
+          "@value": "Provides records of when Fortigates intervened (with or without decrypting) in SSL/TLS traffic"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "search",
+        "version": "1"
+      },
+      "id": "41249293-7bb4-4c16-adae-85ff3dcb720e",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": ""
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "2c3a5510-9385-42cf-b8b9-e3c15b24c77b",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "filter": {
+                "type": "or",
+                "filters": [
+                  {
+                    "type": "stream",
+                    "id": "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  }
+                ]
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": null,
+                  "name": "chart",
+                  "timerange": null,
+                  "streams": [],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "time",
+                      "field": "timestamp",
+                      "interval": {
+                        "type": "auto",
+                        "scaling": 1
+                      }
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "67e773aa-737e-48f8-baa9-80efd4f0a6a3",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": null,
+                  "name": null,
+                  "timerange": null,
+                  "offset": 0,
+                  "streams": [],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "8b52c5e9-8866-4b01-875b-17f0852e8828",
+                  "limit": 150
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-22T12:26:25.752Z"
+        },
+        "created_at": "2021-08-22T12:26:13.246Z",
+        "requires": {},
+        "state": {
+          "2c3a5510-9385-42cf-b8b9-e3c15b24c77b": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "widget": {
+                "b4140a62-b7d7-48a1-a878-2909b590b44d": "Activity",
+                "3940c3cf-6995-42ce-a46b-b342864d988c": "Details"
+              }
+            },
+            "widgets": [
+              {
+                "id": "3940c3cf-6995-42ce-a46b-b342864d988c",
+                "type": "messages",
+                "filter": null,
+                "timerange": null,
+                "query": null,
+                "streams": [],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "FTNTFGTlevel",
+                    "FTNTFGTsubtype",
+                    "FTNTFGTeventtype",
+                    "FTNTFGTutmaction",
+                    "act",
+                    "source"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "b4140a62-b7d7-48a1-a878-2909b590b44d",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": null,
+                "query": null,
+                "streams": [],
+                "config": {
+                  "visualization": "bar",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "timestamp",
+                      "type": "time",
+                      "config": {
+                        "interval": {
+                          "type": "auto",
+                          "scaling": 1
+                        }
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              }
+            ],
+            "widget_mapping": {
+              "b4140a62-b7d7-48a1-a878-2909b590b44d": [
+                "67e773aa-737e-48f8-baa9-80efd4f0a6a3"
+              ],
+              "3940c3cf-6995-42ce-a46b-b342864d988c": [
+                "8b52c5e9-8866-4b01-875b-17f0852e8828"
+              ]
+            },
+            "positions": {
+              "3940c3cf-6995-42ce-a46b-b342864d988c": {
+                "col": 1,
+                "row": 26,
+                "height": 6,
+                "width": "Infinity"
+              },
+              "b4140a62-b7d7-48a1-a878-2909b590b44d": {
+                "col": 1,
+                "row": 24,
+                "height": 2,
+                "width": "Infinity"
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate"
+        },
+        "type": "SEARCH",
+        "description": {
+          "@type": "string",
+          "@value": ""
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "stream",
+        "version": "1"
+      },
+      "id": "abe50ab9-fb09-4cae-be9e-bb78da710285",
+      "data": {
+        "alarm_callbacks": [],
+        "outputs": [],
+        "remove_matches": {
+          "@type": "boolean",
+          "@value": true
+        },
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate"
+        },
+        "stream_rules": [
+          {
+            "type": {
+              "@type": "string",
+              "@value": "EXACT"
+            },
+            "field": {
+              "@type": "string",
+              "@value": "device_product"
+            },
+            "value": {
+              "@type": "string",
+              "@value": "Fortigate"
+            },
+            "inverted": {
+              "@type": "boolean",
+              "@value": false
+            },
+            "description": {
+              "@type": "string",
+              "@value": ""
+            }
+          }
+        ],
+        "alert_conditions": [],
+        "matching_type": {
+          "@type": "string",
+          "@value": "AND"
+        },
+        "disabled": {
+          "@type": "boolean",
+          "@value": false
+        },
+        "description": {
+          "@type": "string",
+          "@value": "Messages from the Fortigate"
+        },
+        "default_stream": {
+          "@type": "boolean",
+          "@value": false
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "2"
+      },
+      "id": "3edcd570-e706-4386-b740-a51d0067ef3f",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": "Details of DNS queries and responses"
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "609256a5-b8f0-40e3-9183-633a5ea7b115",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "dst",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "7811c53d-9977-4212-a701-2faab898bf0b",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "src",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrcmac",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrchwvendor",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "3ca09489-f0df-419f-ae94-eb327b23347c",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTcatdesc",
+                      "limit": 20
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "216e81c8-6d71-4b57-bfa3-ac737e10fc34",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:dns AND FTNTFGTeventtype:dns-response"
+                  },
+                  "name": null,
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "offset": 0,
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "1af53b63-3dee-479a-a47e-1f3cad89b901",
+                  "limit": 150
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:dns AND FTNTFGTeventtype:dns-response"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "act",
+                      "limit": 15
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "a98c3b95-1570-40f9-93f8-235bd415de08",
+                  "column_groups": [],
+                  "sort": []
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-23T02:36:40.207Z"
+        },
+        "created_at": "2021-08-22T22:40:31.199Z",
+        "requires": {},
+        "state": {
+          "609256a5-b8f0-40e3-9183-633a5ea7b115": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "tab": {
+                "title": "DNS"
+              },
+              "widget": {
+                "69c2ab5f-6744-4ce8-bf84-22c75ee32877": "Details",
+                "5a1fdf1a-a77b-4182-a0a9-c6817630d0a8": "DNS Action",
+                "b0673ba6-8d12-4e2d-92b9-95f46131b9d4": "Top 20 DNS Categories",
+                "7d4f422d-e3c6-4e69-ad8c-5105084a1b56": "Top 500 DNS Resolvers",
+                "17f52e81-e4ab-40c9-85a8-ee372dfe31af": "Top 500 DNS Clients"
+              }
+            },
+            "widgets": [
+              {
+                "id": "b0673ba6-8d12-4e2d-92b9-95f46131b9d4",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTcatdesc",
+                      "type": "values",
+                      "config": {
+                        "limit": 20
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "17f52e81-e4ab-40c9-85a8-ee372dfe31af",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "src",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrcmac",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrchwvendor",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "5a1fdf1a-a77b-4182-a0a9-c6817630d0a8",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:dns AND FTNTFGTeventtype:dns-response"
+                },
+                "streams": [],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "act",
+                      "type": "values",
+                      "config": {
+                        "limit": 15
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "69c2ab5f-6744-4ce8-bf84-22c75ee32877",
+                "type": "messages",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:dns AND FTNTFGTeventtype:dns-response"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "src",
+                    "dst",
+                    "FTNTFGTqname",
+                    "FTNTFGTqtype",
+                    "FTNTFGTcatdesc",
+                    "act",
+                    "source"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "7d4f422d-e3c6-4e69-ad8c-5105084a1b56",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "dst",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              }
+            ],
+            "widget_mapping": {
+              "17f52e81-e4ab-40c9-85a8-ee372dfe31af": [
+                "3ca09489-f0df-419f-ae94-eb327b23347c"
+              ],
+              "69c2ab5f-6744-4ce8-bf84-22c75ee32877": [
+                "1af53b63-3dee-479a-a47e-1f3cad89b901"
+              ],
+              "5a1fdf1a-a77b-4182-a0a9-c6817630d0a8": [
+                "a98c3b95-1570-40f9-93f8-235bd415de08"
+              ],
+              "b0673ba6-8d12-4e2d-92b9-95f46131b9d4": [
+                "216e81c8-6d71-4b57-bfa3-ac737e10fc34"
+              ],
+              "7d4f422d-e3c6-4e69-ad8c-5105084a1b56": [
+                "7811c53d-9977-4212-a701-2faab898bf0b"
+              ]
+            },
+            "positions": {
+              "17f52e81-e4ab-40c9-85a8-ee372dfe31af": {
+                "col": 7,
+                "row": 7,
+                "height": 4,
+                "width": 6
+              },
+              "7d4f422d-e3c6-4e69-ad8c-5105084a1b56": {
+                "col": 1,
+                "row": 6,
+                "height": 4,
+                "width": 6
+              },
+              "5a1fdf1a-a77b-4182-a0a9-c6817630d0a8": {
+                "col": 7,
+                "row": 1,
+                "height": 5,
+                "width": 6
+              },
+              "b0673ba6-8d12-4e2d-92b9-95f46131b9d4": {
+                "col": 1,
+                "row": 1,
+                "height": 5,
+                "width": 6
+              },
+              "69c2ab5f-6744-4ce8-bf84-22c75ee32877": {
+                "col": 1,
+                "row": 11,
+                "height": 5,
+                "width": "Infinity"
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate DNS Traffic"
+        },
+        "type": "DASHBOARD",
+        "description": {
+          "@type": "string",
+          "@value": "Includes details of the query, response, action, and category"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "2"
+      },
+      "id": "541e60c6-6f2a-4805-b820-0277c0960288",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": "Web traffic details"
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "8c251406-7ec3-4259-ac68-43ad4fbc435a",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": null,
+                  "name": "chart",
+                  "timerange": null,
+                  "streams": [],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "act",
+                      "limit": 15
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "6775737f-2f66-4d59-a696-0f716917d5c6",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": null,
+                  "name": "chart",
+                  "timerange": null,
+                  "streams": [],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "requestContext",
+                      "limit": 20
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "38aa393f-4c23-4580-990f-2d540e2f13d5",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:webfilter"
+                  },
+                  "name": null,
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "offset": 0,
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "f3f0e2db-9219-4f51-bb58-ebb0299e6cb8",
+                  "limit": 150
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-23T02:52:00.958Z"
+        },
+        "created_at": "2021-08-22T00:04:35.919Z",
+        "requires": {},
+        "state": {
+          "8c251406-7ec3-4259-ac68-43ad4fbc435a": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "tab": {
+                "title": "Web Traffic"
+              },
+              "widget": {
+                "998c4004-631c-46e3-be1b-f00c8e1bdcea": "Details",
+                "626657a1-685f-4050-ba36-d4eaa1f414da": "Messages for FTNTFGTutmaction:allow",
+                "0f91d521-54f5-4b52-aab9-79b0fda99f6b": "Action",
+                "bc70a97e-ba93-4d1b-8b07-289d22bb344d": "Top 20 Categories"
+              }
+            },
+            "widgets": [
+              {
+                "id": "0f91d521-54f5-4b52-aab9-79b0fda99f6b",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": null,
+                "query": null,
+                "streams": [],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "act",
+                      "type": "values",
+                      "config": {
+                        "limit": 15
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "bc70a97e-ba93-4d1b-8b07-289d22bb344d",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": null,
+                "query": null,
+                "streams": [],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "requestContext",
+                      "type": "values",
+                      "config": {
+                        "limit": 20
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "998c4004-631c-46e3-be1b-f00c8e1bdcea",
+                "type": "messages",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:webfilter"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "src",
+                    "dst",
+                    "dhost",
+                    "requestContext",
+                    "act"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              }
+            ],
+            "widget_mapping": {
+              "0f91d521-54f5-4b52-aab9-79b0fda99f6b": [
+                "6775737f-2f66-4d59-a696-0f716917d5c6"
+              ],
+              "bc70a97e-ba93-4d1b-8b07-289d22bb344d": [
+                "38aa393f-4c23-4580-990f-2d540e2f13d5"
+              ],
+              "998c4004-631c-46e3-be1b-f00c8e1bdcea": [
+                "f3f0e2db-9219-4f51-bb58-ebb0299e6cb8"
+              ]
+            },
+            "positions": {
+              "0f91d521-54f5-4b52-aab9-79b0fda99f6b": {
+                "col": 8,
+                "row": 1,
+                "height": 5,
+                "width": 5
+              },
+              "bc70a97e-ba93-4d1b-8b07-289d22bb344d": {
+                "col": 1,
+                "row": 1,
+                "height": 5,
+                "width": 7
+              },
+              "998c4004-631c-46e3-be1b-f00c8e1bdcea": {
+                "col": 1,
+                "row": 6,
+                "height": 5,
+                "width": "Infinity"
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate Web Traffic"
+        },
+        "type": "DASHBOARD",
+        "description": {
+          "@type": "string",
+          "@value": "Includes category, action, and more"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    },
+    {
+      "v": "1",
+      "type": {
+        "name": "dashboard",
+        "version": "2"
+      },
+      "id": "b635c25d-3d15-43e8-9bbc-4461683f7da7",
+      "data": {
+        "summary": {
+          "@type": "string",
+          "@value": "Analysis of devices and application traffic"
+        },
+        "search": {
+          "queries": [
+            {
+              "id": "a2831f63-a6f7-4e2b-bd8b-81aa056c7b1d",
+              "timerange": {
+                "type": "relative",
+                "from": 300
+              },
+              "query": {
+                "type": "elasticsearch",
+                "query_string": ""
+              },
+              "search_types": [
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "src",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrcmac",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrchwvendor",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrcfamily",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTdevtype",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "7a370e29-60ec-4b61-a0da-a6f60de04d85",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "dst",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "5d5bcb52-3449-41f4-8922-0345ce6c802b",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTapp:* AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count(FTNTFGTapp)",
+                      "field": "FTNTFGTapp"
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTapp",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "3d0fdede-981e-4a6d-a62a-4cd37cbfd6b1",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                  },
+                  "name": null,
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "offset": 0,
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "filter": null,
+                  "decorators": [],
+                  "type": "messages",
+                  "id": "53e21ed9-90e4-43d6-8afd-466023ec91f1",
+                  "limit": 150
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTapp",
+                      "limit": 20
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "351ed53b-f952-44c8-b837-db64b9883f1e",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTapp:* AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTutmaction",
+                      "limit": 20
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "9246a9ca-0154-4e5a-9824-1b30ebe07d61",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": ""
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "src",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrcmac",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrchwvendor",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTosname",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "c9a147db-734e-4026-90b2-e01c17d0c8c6",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "src",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrcmac",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "shost",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "42af03b9-919a-43d6-91ea-02f5998938ec",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTapp:* AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "count()",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTapprisk",
+                      "limit": 20
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "592b6f86-3d2c-4457-95b1-1382931b837b",
+                  "column_groups": [],
+                  "sort": []
+                },
+                {
+                  "query": {
+                    "type": "elasticsearch",
+                    "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                  },
+                  "name": "chart",
+                  "timerange": {
+                    "type": "relative",
+                    "from": 300
+                  },
+                  "streams": [
+                    "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                  ],
+                  "series": [
+                    {
+                      "type": "count",
+                      "id": "messages",
+                      "field": null
+                    }
+                  ],
+                  "filter": null,
+                  "rollup": true,
+                  "row_groups": [
+                    {
+                      "type": "values",
+                      "field": "src",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrcmac",
+                      "limit": 500
+                    },
+                    {
+                      "type": "values",
+                      "field": "FTNTFGTsrchwvendor",
+                      "limit": 500
+                    }
+                  ],
+                  "type": "pivot",
+                  "id": "bb31ca8d-51cf-43a4-83cf-897d0ad4fa81",
+                  "column_groups": [],
+                  "sort": []
+                }
+              ]
+            }
+          ],
+          "parameters": [],
+          "requires": {},
+          "owner": "sean",
+          "created_at": "2021-08-23T02:53:56.651Z"
+        },
+        "created_at": "2021-08-20T14:52:35.012Z",
+        "requires": {},
+        "state": {
+          "a2831f63-a6f7-4e2b-bd8b-81aa056c7b1d": {
+            "selected_fields": null,
+            "static_message_list_id": null,
+            "titles": {
+              "tab": {
+                "title": "Applications"
+              },
+              "widget": {
+                "c689f7d9-7603-4bbe-9270-0cd72d7d3813": "App Risk",
+                "7d41b01e-835f-4a28-a004-3471a948ebb2": "Action",
+                "cff4179d-cb6d-4804-a37c-98934095097c": "Source Hostnames",
+                "348c53bd-c803-4140-83f4-d5098ecf9673": "Top 500 Sources",
+                "c2193b01-5433-4738-bf8a-5fd9c511c452": "Top 500 Destinations",
+                "9e5821e4-a2ad-4879-847c-58572c59656a": "Top 500 Applications",
+                "832fb0c5-4fb7-48cd-8fcb-9d6420a4acc5": "Source Hardware Details",
+                "f5ec7f4b-862c-4b82-8e65-a1d8bed243cf": "Field Statistics for act",
+                "8608789e-bfca-4a40-8e5e-c0cea58a3406": "Source OS",
+                "e629c5ef-7fb8-4e95-9738-a6e7e9b8c1bc": "Top applications (copy)",
+                "12219289-70dd-4d40-8fea-b33b94f4b96d": "Top 20 Applications",
+                "fe0bf0c8-ab22-41b0-a0e9-f190ba015ee1": "Field Statistics for dst",
+                "d6bbdb30-ded7-40b9-80fd-002ca662906d": "Details"
+              }
+            },
+            "widgets": [
+              {
+                "id": "d6bbdb30-ded7-40b9-80fd-002ca662906d",
+                "type": "messages",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "fields": [
+                    "timestamp",
+                    "shost",
+                    "src",
+                    "dst",
+                    "dpt",
+                    "FTNTFGTapp",
+                    "FTNTFGTutmaction"
+                  ],
+                  "show_message_row": true,
+                  "decorators": [],
+                  "sort": [
+                    {
+                      "type": "pivot",
+                      "field": "timestamp",
+                      "direction": "Descending"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "12219289-70dd-4d40-8fea-b33b94f4b96d",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTapp",
+                      "type": "values",
+                      "config": {
+                        "limit": 20
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "832fb0c5-4fb7-48cd-8fcb-9d6420a4acc5",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "src",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrcmac",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrchwvendor",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrcfamily",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTdevtype",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "c2193b01-5433-4738-bf8a-5fd9c511c452",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "dst",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "9e5821e4-a2ad-4879-847c-58572c59656a",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTapp:* AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTapp",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count(FTNTFGTapp)"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "cff4179d-cb6d-4804-a37c-98934095097c",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "src",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrcmac",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "shost",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "7d41b01e-835f-4a28-a004-3471a948ebb2",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTapp:* AND FTNTFGTutmaction:*"
+                },
+                "streams": [],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTutmaction",
+                      "type": "values",
+                      "config": {
+                        "limit": 20
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "c689f7d9-7603-4bbe-9270-0cd72d7d3813",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTapp:* AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "pie",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "FTNTFGTapprisk",
+                      "type": "values",
+                      "config": {
+                        "limit": 20
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": null
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "8608789e-bfca-4a40-8e5e-c0cea58a3406",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": ""
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "src",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrcmac",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrchwvendor",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTosname",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              },
+              {
+                "id": "348c53bd-c803-4140-83f4-d5098ecf9673",
+                "type": "aggregation",
+                "filter": null,
+                "timerange": {
+                  "type": "relative",
+                  "from": 300
+                },
+                "query": {
+                  "type": "elasticsearch",
+                  "query_string": "FTNTFGTsubtype:forward AND FTNTFGTutmaction:*"
+                },
+                "streams": [
+                  "abe50ab9-fb09-4cae-be9e-bb78da710285"
+                ],
+                "config": {
+                  "visualization": "table",
+                  "event_annotation": false,
+                  "row_pivots": [
+                    {
+                      "field": "src",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrcmac",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    },
+                    {
+                      "field": "FTNTFGTsrchwvendor",
+                      "type": "values",
+                      "config": {
+                        "limit": 500
+                      }
+                    }
+                  ],
+                  "series": [
+                    {
+                      "config": {
+                        "name": "messages"
+                      },
+                      "function": "count()"
+                    }
+                  ],
+                  "rollup": true,
+                  "column_pivots": [],
+                  "visualization_config": null,
+                  "formatting_settings": null,
+                  "sort": []
+                }
+              }
+            ],
+            "widget_mapping": {
+              "c689f7d9-7603-4bbe-9270-0cd72d7d3813": [
+                "592b6f86-3d2c-4457-95b1-1382931b837b"
+              ],
+              "7d41b01e-835f-4a28-a004-3471a948ebb2": [
+                "9246a9ca-0154-4e5a-9824-1b30ebe07d61"
+              ],
+              "cff4179d-cb6d-4804-a37c-98934095097c": [
+                "42af03b9-919a-43d6-91ea-02f5998938ec"
+              ],
+              "348c53bd-c803-4140-83f4-d5098ecf9673": [
+                "bb31ca8d-51cf-43a4-83cf-897d0ad4fa81"
+              ],
+              "c2193b01-5433-4738-bf8a-5fd9c511c452": [
+                "5d5bcb52-3449-41f4-8922-0345ce6c802b"
+              ],
+              "9e5821e4-a2ad-4879-847c-58572c59656a": [
+                "3d0fdede-981e-4a6d-a62a-4cd37cbfd6b1"
+              ],
+              "832fb0c5-4fb7-48cd-8fcb-9d6420a4acc5": [
+                "7a370e29-60ec-4b61-a0da-a6f60de04d85"
+              ],
+              "8608789e-bfca-4a40-8e5e-c0cea58a3406": [
+                "c9a147db-734e-4026-90b2-e01c17d0c8c6"
+              ],
+              "12219289-70dd-4d40-8fea-b33b94f4b96d": [
+                "351ed53b-f952-44c8-b837-db64b9883f1e"
+              ],
+              "d6bbdb30-ded7-40b9-80fd-002ca662906d": [
+                "53e21ed9-90e4-43d6-8afd-466023ec91f1"
+              ]
+            },
+            "positions": {
+              "c689f7d9-7603-4bbe-9270-0cd72d7d3813": {
+                "col": 7,
+                "row": 21,
+                "height": 4,
+                "width": 3
+              },
+              "7d41b01e-835f-4a28-a004-3471a948ebb2": {
+                "col": 10,
+                "row": 21,
+                "height": 4,
+                "width": 3
+              },
+              "cff4179d-cb6d-4804-a37c-98934095097c": {
+                "col": 1,
+                "row": 19,
+                "height": 4,
+                "width": 6
+              },
+              "348c53bd-c803-4140-83f4-d5098ecf9673": {
+                "col": 1,
+                "row": 16,
+                "height": 3,
+                "width": 6
+              },
+              "c2193b01-5433-4738-bf8a-5fd9c511c452": {
+                "col": 1,
+                "row": 31,
+                "height": 3,
+                "width": 6
+              },
+              "9e5821e4-a2ad-4879-847c-58572c59656a": {
+                "col": 7,
+                "row": 25,
+                "height": 9,
+                "width": 6
+              },
+              "832fb0c5-4fb7-48cd-8fcb-9d6420a4acc5": {
+                "col": 1,
+                "row": 27,
+                "height": 4,
+                "width": 6
+              },
+              "8608789e-bfca-4a40-8e5e-c0cea58a3406": {
+                "col": 1,
+                "row": 23,
+                "height": 4,
+                "width": 6
+              },
+              "12219289-70dd-4d40-8fea-b33b94f4b96d": {
+                "col": 7,
+                "row": 16,
+                "height": 5,
+                "width": 6
+              },
+              "d6bbdb30-ded7-40b9-80fd-002ca662906d": {
+                "col": 1,
+                "row": 34,
+                "height": 7,
+                "width": "Infinity"
+              }
+            },
+            "formatting": {
+              "highlighting": []
+            },
+            "display_mode_settings": {
+              "positions": {}
+            }
+          }
+        },
+        "properties": [],
+        "owner": "sean",
+        "title": {
+          "@type": "string",
+          "@value": "Fortigate Applications and Devices"
+        },
+        "type": "DASHBOARD",
+        "description": {
+          "@type": "string",
+          "@value": "Includes IP addresses, MAC addresses, device manufacturers, and application layer network traffic"
+        }
+      },
+      "constraints": [
+        {
+          "type": "server-version",
+          "version": ">=4.1.3+9d79c05"
+        }
+      ]
+    }
+  ]
+}
