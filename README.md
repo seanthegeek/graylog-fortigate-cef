@@ -1,6 +1,6 @@
 # graylog-fortigate-cef
 
-This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1 and FortiOS 7.0.1, but is should work with FortiOS 6.4 as well.
+This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs. It has been tested with Graylog 4.1 and FortiOS 7.0.1, but it should work with FortiOS 6.4 as well.
 
 ## Streams
 
