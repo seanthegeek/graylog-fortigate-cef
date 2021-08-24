@@ -62,7 +62,7 @@ The Stream that comes with this content pack is configured to route the logs to 
 
 Navigate to System> Indices, and create a new Index Set with a title of `Fortigate CEF Logs` and an index prefix of `fortigate_cef`. Then, click on Streams in the main navigation bar. Edit the `Fortigate CEF Logs` Stream and ensure it is configured to use the Index Set that you just created.
 
-**Important**: Leave `Remove matches from ‘All messages’ stream` box checked, or you will end up with the data being duplicated over two Index Sets.
+**Important**: Leave `Remove matches from ‘All messages’ stream` box checked, or the data will be duplicated over two Index Sets.
 
 Create a CEF UDP **or** a CEF TCP input by navigating to System> Inputs as a Graylog administrator, and clicking on Launch New Input.
 
