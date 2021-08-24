@@ -54,6 +54,8 @@ All Fortigate CEF logs
 
 ## Graylog Setup
 
+Edit the Graylog server configuration file at `/etc/graylog/server/server.conf`. Locate the `allow_leading_wildcard_searches` and `allow_highlighting` options, and set both to `true`. Restart the Graylog server by running `sudo systemctl restart graylog-server.service`.
+
 Import the Content Pack into Graylog by navigating to System> Content Packs, clicking on the upload button, and uploading the Content Pack JSON file.
 
 In Graylog an Input accepts log traffic from a source an parses it. That data is sent to Streams, which filters and routes log traffic to Index Sets. Index Sets manage the Elasticsearch indexes that Graylog uses as a backend.
