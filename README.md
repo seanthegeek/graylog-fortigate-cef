@@ -54,7 +54,17 @@ All Fortigate CEF logs
 
 ## Graylog Setup
 
-Create a CEF UDP **or** a CEF TCP input by navigating to System> Inputs as a Graylog administrator, and clicking on Launch New input.
+Import the Content Pack into Graylog by navigating to System> Content Packs, clicking on the upload button, and uploading the Content Pack JSON file.
+
+In Graylog an Input accepts log traffic from a source an parses it. That data is sent to Streams, which filters and routes log traffic to Index Sets. Index Sets manage the Elasticsearch indexes that Graylog uses as a backend.
+
+The Stream that comes with this content pack is configured to route the logs to a separate Index Set called `Fortigate CEF Logs`. It does not create the Index Set, so the Index Set needs to be created.
+
+Navigate to System> Indices, and create a new Index Set with a title of `Fortigate CEF Logs` and an index prefix of `fortigate_cef`. Then, click on Streams in the main navigation bar. Edit the `Fortigate CEF Logs` Stream and ensure it is configured to use the Index Set that you just created.
+
+**Important** Leave: `Remove matches from ‘All messages’ stream` box checked, or you will end up with the data being duplicated over two Index Sets.
+
+Create a CEF UDP **or** a CEF TCP input by navigating to System> Inputs as a Graylog administrator, and clicking on Launch New Input.
 
 Before creating a CEF TCP input:
 
@@ -66,7 +76,35 @@ When creating a CEF TLS Input, be sure to check the `Accept encrypted connection
 
 ## Fortigate setup
 
-Configure your Fortigates to send data to Graylog in CEF format by using the FortiOS [Command Line Interface (CLI)][CLI]. Replace the server address and port with the address and port of your input, of course.
+Configure your Fortigates to send data to Graylog in CEF format by using the FortiOS [Command Line Interface (CLI)][CLI].
+
+Replace the server address and port with the address and port of your input, of course.
+
+## Time zone
+
+To simplify and unify log management, it is important that every firewall be configured to use the GMT timezone, which for logging purposes is equivalent UTC.
+
+```fortios
+config system global
+    set timezone 80
+end
+```
+
+## Log filtering
+
+By default, logs sent to the syslog server are not filtered. To ensure that the Graylog Input gets all logs, ensure all log filter options are at their default settings.
+
+```fortios
+config log syslogd filter
+    unset severity
+    unset forward-traffic
+    unset local-traffic
+    unset multicast-traffic
+    unset sniffer-traffic
+    unset anomaly
+    unset voip
+end
+```
 
 ### CEF UDP
 
