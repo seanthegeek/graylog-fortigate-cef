@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5-rev6
+
+- Fortigate - Applications and Devices dashboard
+  - Add Top 20 Source Operating Systems and Top 20 Source Vendors pie charts
+
 ## 1.0.4-rev5
 
 - Fortigate - Applications and Devices dashboard
