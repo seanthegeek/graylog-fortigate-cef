@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.6-rev7
+
+- Add pie charts to the Fortigate - Applications and Devices dashboard
+  - Source Interface Roles
+  - Top 20 Source Interfaces
+  - Destination Interface Roles
+  - Top 20 Destination Interfaces
+  - Top 20 Source Operating Systems
+  - Top 20 source Vendors
+  - Top 20 Device Types
+
 ## 1.0.5-rev6
 
 - Fortigate - Applications and Devices dashboard
