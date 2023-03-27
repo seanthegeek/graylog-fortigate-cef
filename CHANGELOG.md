@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-rev20
+
+- Use `_exists_` instead of `*`
+- Application and Devices Dashboard
+  - Combine source widget tables into one table widget
+- DNS dashboard fixes
+
 ## 1.0.6-rev7
 
 - Add pie charts to the Fortigate - Applications and Devices dashboard
