@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.2-rev23
+
+- DNS Traffic dashboard
+  - Exclude empty values from the Category and Action widgets
+- Web Traffic dashboard
+  - Fix Category widget
+
 ## 2.0.1-rev21
 
 - Remove duplicate streams
