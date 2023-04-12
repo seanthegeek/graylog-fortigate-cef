@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1-rev21
+
+- Remove duplicate streams
+
 ## 2.0.0-rev20
 
 - Use `_exists_` instead of `*`
