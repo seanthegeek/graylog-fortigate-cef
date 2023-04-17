@@ -1,5 +1,9 @@
 # Fortigate CEF Logs - Graylog Content Pack
 
+## Notice
+
+This project has been depricated. Please use https://github.com/seanthegeek/graylog-fortigate-syslog instead.
+
 This [Graylog][graylog] content pack includes a steam and dashboards for Fortinet Fortigate Common Event Format (CEF) logs.
 
 ## Streams
